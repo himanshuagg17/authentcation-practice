@@ -59,10 +59,18 @@ app.post("/loginwithtoken",async(req,res)=>{
     const {email,password}= req.body;
     const token= jwt.sign({course:"backend"},"masai");
     try{
-        const customer=await CustomerModel
+       // const customer=await CustomerModel.find({$and:[{email:email},{password:password}]});
+        const customer=await CustomerModel.find({$and:[{email:email},{password:password}]});
+
+        if(customer.length>0){
+            res.send({"msg":"login successful","token":token});
+        }
+        else{
+            res.send("user not found");
+        }
     }
     catch{
-
+        res.send("please register first");
     }
 
 })
